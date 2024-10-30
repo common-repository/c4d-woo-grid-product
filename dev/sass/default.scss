@@ -1,0 +1,208 @@
+.c4d-woo-gp {
+	position: relative;
+	margin: auto -15px;
+	&__categories {
+		text-align: center;
+		margin: 30px auto 40px;
+		span {
+			font-size: 13px;
+			font-weight: 400;
+			color: #818181;
+			text-transform: uppercase;
+			display: inline-block;
+			margin: auto 10px;
+			cursor: pointer;
+			&.active {
+				color: red;
+			}
+		}
+	}
+	&__loadmore {
+		text-align: center;
+		&.loading {
+			display: none;
+		}
+		&_button {
+			font-size: 12px;
+			font-weight: 300;
+			line-height: 12px;
+			text-transform: uppercase;
+			display: inline-block;
+			padding: 18px 50px;
+			color: #cfcfcf;
+			border: 1px solid #cfcfcf;
+			border-radius: 30px;
+		}
+	}
+	&.load-more-empty {
+		.c4d-woo-gp__loadmore {
+			display: none;
+		}
+	}
+	&__loading {
+		text-align: center;
+		display: none;
+		&.active {
+			display: block;
+		}
+
+		.button,
+		.button:after,
+		.button:before {
+			position: relative;
+			width: 9px;
+			height: 9px;
+			border-radius: 50%;
+			background: #000;
+			display: inline-block;
+		}
+		.button:after {
+			content: '';
+			position: absolute;
+			top: 0;
+			right: 0px;
+			animation: rightload 1s infinite;
+		}
+		.button:before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0px;
+			animation: leftload 1s infinite;
+		}
+	}
+	&__grid {
+		> * {
+			&:after {
+				content: '';
+				display: block;
+				clear: both;
+			}
+		}
+		.item {
+			float: left;
+			.item-inner {
+				margin: auto 15px;
+				position: relative;
+				a {
+					color: #000;
+				}
+				.image {
+					img {
+						width: 100%;
+						height: auto;
+					}
+				}
+				a .category {
+					font-size: 12px;
+					font-weight: 300;
+					color: #999;
+					text-transform: uppercase;
+					margin: 20px auto 0;
+					padding: 0;
+				}
+
+				.title {
+					font-size: 15px;
+					color: #000;
+					margin: 10px auto 0;
+					padding: 0;
+				}
+				.price {
+					margin-top: 10px;
+					font-size: 18px;
+					color: #000;
+					del {
+						font-size: 14px;
+						color: #b7b7b7;
+						text-decoration: none;
+					}
+					ins {
+						text-decoration: none;
+					}
+				}
+				.onsale {
+					top: 10%;
+					left: 10%;
+				}
+			}
+		}
+	}
+}
+@keyframes rightload {
+  0%{ 
+    transform: translateX(20px);
+  } 
+  50% {
+  	transform: translateY(0px);
+  }
+  100%{ 
+    transform: translateX(20px);
+  } 
+}
+@keyframes leftload {
+  0%{ 
+    transform: translateX(-20px);
+  } 
+  50% {
+  	transform: translateY(0px);
+  }
+  100%{ 
+    transform: translateX(-20px);
+  } 
+}
+@mixin breakpoint($point) {
+	@if $point == desktop {
+		@media (max-width: 1920px) { @content ; }
+	}
+	@else if $point == laptop {
+	 	@media (max-width: 1200px) { @content ; }
+	}
+	@else if $point == tablet {
+	 	@media (max-width: 1023px) { @content ; }
+	}
+	@else if $point == phablet {
+	 	@media (max-width: 768px)  { @content ; }
+	}
+	@else if $point == sixplus {
+	 	@media (max-width: 736px)  { @content ; }
+	}
+	@else if $point == mobileonly {
+	 	@media (max-width: 640px)  { @content ; }
+	}
+}
+
+@for $i from 1 through 12 {
+  	.c4d-woo-gp__grid[data-cols="#{$i}"] {
+		.item {
+			width: 100% / $i;
+			@for $b from 1 through 20 {
+				&:nth-child(#{$i * $b}) + .item {
+					clear: left;
+				}
+			}
+			@if $i > 3 {
+				@include breakpoint(sixplus) {
+					width: (100% / 4);
+					float: left;
+					clear: none !important;
+					@for $b from 1 through 20 {
+						&:nth-child(#{4 * $b}) + .item {
+							clear: left !important;
+						}
+					}
+				}	
+				@include breakpoint(mobileonly) {
+					width: (100% / 2);
+					float: left;
+					clear: none !important;
+					@for $b from 1 through 20 {
+						&:nth-child(#{2 * $b}) + .item {
+							clear: left !important;
+						}
+					}
+				}			
+			}
+		}
+	}
+}
